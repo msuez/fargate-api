@@ -15,11 +15,64 @@ custom:
     subnetIds:
       - subnet-0773bb21b51055b94
 
-fargate:
-  app:
-    image: 780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest
-    cpu: 256
-    memory: 512
-    port: 3000
-    environment:
-      NODE_ENV: production
+resources:
+  Resources:
+    FargateTask:
+      Type: AWS::ECS::TaskDefinition
+      Properties:
+        Family: fargate-api
+        Cpu: "256"
+        Memory: "512"
+        NetworkMode: awsvpc
+        RequiresCompatibilities:
+          - FARGATE
+        ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+        TaskRoleArn: !GetAtt TaskRole.Arn
+        ContainerDefinitions:
+          - Name: fargate-api
+            Image: 780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest
+            PortMappings:
+              - ContainerPort: 3000
+                Protocol: tcp
+            Environment:
+              - Name: NODE_ENV
+                Value: production
+
+    ExecutionRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - ecs-tasks.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: ECSExecutionPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - ecr:GetAuthorizationToken
+                    - ecr:BatchCheckLayerAvailability
+                    - ecr:GetDownloadUrlForLayer
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource: "*"
+
+    TaskRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - ecs-tasks.amazonaws.com
+              Action:
+                - sts:AssumeRole
