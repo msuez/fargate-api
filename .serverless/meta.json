@@ -1,0 +1,343 @@
+{
+  "/Users/matiassuez/Desktop/Workspace/Vercel/fargate-api": {
+    "versionSfCore": null,
+    "versionFramework": "4.4.11",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>",
+      "sls": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "service": "fargate-api",
+            "provider": {
+              "name": "aws",
+              "region": "us-east-1",
+              "stage": "dev",
+              "versionFunctions": true
+            },
+            "plugins": [
+              "serverless-fargate"
+            ],
+            "custom": {
+              "fargate": {
+                "clusterName": "fargate-cluster",
+                "securityGroupIds": [
+                  "sg-03609c89aa1549572"
+                ],
+                "subnetIds": [
+                  "subnet-0773bb21b51055b94"
+                ]
+              }
+            },
+            "resources": {
+              "Resources": {
+                "FargateTask": {
+                  "Type": "AWS::ECS::TaskDefinition",
+                  "Properties": {
+                    "Family": "fargate-api",
+                    "Cpu": "256",
+                    "Memory": "512",
+                    "NetworkMode": "awsvpc",
+                    "RequiresCompatibilities": [
+                      "FARGATE"
+                    ],
+                    "ExecutionRoleArn": {
+                      "Fn::GetAtt": [
+                        "ExecutionRole",
+                        "Arn"
+                      ]
+                    },
+                    "TaskRoleArn": {
+                      "Fn::GetAtt": [
+                        "TaskRole",
+                        "Arn"
+                      ]
+                    },
+                    "ContainerDefinitions": [
+                      {
+                        "Name": "fargate-api",
+                        "Image": "780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest",
+                        "PortMappings": [
+                          {
+                            "ContainerPort": 3000,
+                            "Protocol": "tcp"
+                          }
+                        ],
+                        "Environment": [
+                          {
+                            "Name": "NODE_ENV",
+                            "Value": "production"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "ExecutionRole": {
+                  "Type": "AWS::IAM::Role",
+                  "Properties": {
+                    "AssumeRolePolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": [
+                              "ecs-tasks.amazonaws.com"
+                            ]
+                          },
+                          "Action": [
+                            "sts:AssumeRole"
+                          ]
+                        }
+                      ]
+                    },
+                    "Policies": [
+                      {
+                        "PolicyName": "ECSExecutionPolicy",
+                        "PolicyDocument": {
+                          "Version": "2012-10-17",
+                          "Statement": [
+                            {
+                              "Effect": "Allow",
+                              "Action": [
+                                "ecr:GetAuthorizationToken",
+                                "ecr:BatchCheckLayerAvailability",
+                                "ecr:GetDownloadUrlForLayer",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Resource": "*"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "TaskRole": {
+                  "Type": "AWS::IAM::Role",
+                  "Properties": {
+                    "AssumeRolePolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": [
+                              "ecs-tasks.amazonaws.com"
+                            ]
+                          },
+                          "Action": [
+                            "sts:AssumeRole"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "configFileDirPath": "/Users/matiassuez/Desktop/Workspace/Vercel/fargate-api",
+          "config": {
+            "type": "sls"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:sls",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "/Users/matiassuez/Desktop/Workspace/Vercel/fargate-api",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "fargate-api",
+      "provider": {
+        "name": "aws",
+        "region": "us-east-1",
+        "stage": "dev",
+        "versionFunctions": true
+      },
+      "plugins": [
+        "serverless-fargate"
+      ],
+      "custom": {
+        "fargate": {
+          "clusterName": "fargate-cluster",
+          "securityGroupIds": [
+            "sg-03609c89aa1549572"
+          ],
+          "subnetIds": [
+            "subnet-0773bb21b51055b94"
+          ]
+        }
+      },
+      "resources": {
+        "Resources": {
+          "FargateTask": {
+            "Type": "AWS::ECS::TaskDefinition",
+            "Properties": {
+              "Family": "fargate-api",
+              "Cpu": "256",
+              "Memory": "512",
+              "NetworkMode": "awsvpc",
+              "RequiresCompatibilities": [
+                "FARGATE"
+              ],
+              "ExecutionRoleArn": {
+                "Fn::GetAtt": [
+                  "ExecutionRole",
+                  "Arn"
+                ]
+              },
+              "TaskRoleArn": {
+                "Fn::GetAtt": [
+                  "TaskRole",
+                  "Arn"
+                ]
+              },
+              "ContainerDefinitions": [
+                {
+                  "Name": "fargate-api",
+                  "Image": "780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest",
+                  "PortMappings": [
+                    {
+                      "ContainerPort": 3000,
+                      "Protocol": "tcp"
+                    }
+                  ],
+                  "Environment": [
+                    {
+                      "Name": "NODE_ENV",
+                      "Value": "production"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "ExecutionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "ecs-tasks.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": "ECSExecutionPolicy",
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "ecr:GetAuthorizationToken",
+                          "ecr:BatchCheckLayerAvailability",
+                          "ecr:GetDownloadUrlForLayer",
+                          "logs:CreateLogStream",
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": "*"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "TaskRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "ecs-tasks.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "serviceRawFile": "service: fargate-api\n\nprovider:\n  name: aws\n  region: us-east-1\n\nplugins:\n  - serverless-fargate\n\ncustom:\n  fargate:\n    clusterName: fargate-cluster\n    securityGroupIds:\n      - sg-03609c89aa1549572\n    subnetIds:\n      - subnet-0773bb21b51055b94\n\nresources:\n  Resources:\n    FargateTask:\n      Type: AWS::ECS::TaskDefinition\n      Properties:\n        Family: fargate-api\n        Cpu: \"256\"\n        Memory: \"512\"\n        NetworkMode: awsvpc\n        RequiresCompatibilities:\n          - FARGATE\n        ExecutionRoleArn: !GetAtt ExecutionRole.Arn\n        TaskRoleArn: !GetAtt TaskRole.Arn\n        ContainerDefinitions:\n          - Name: fargate-api\n            Image: 780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest\n            PortMappings:\n              - ContainerPort: 3000\n                Protocol: tcp\n            Environment:\n              - Name: NODE_ENV\n                Value: production\n\n    ExecutionRole:\n      Type: AWS::IAM::Role\n      Properties:\n        AssumeRolePolicyDocument:\n          Version: \"2012-10-17\"\n          Statement:\n            - Effect: Allow\n              Principal:\n                Service:\n                  - ecs-tasks.amazonaws.com\n              Action:\n                - sts:AssumeRole\n        Policies:\n          - PolicyName: ECSExecutionPolicy\n            PolicyDocument:\n              Version: \"2012-10-17\"\n              Statement:\n                - Effect: Allow\n                  Action:\n                    - ecr:GetAuthorizationToken\n                    - ecr:BatchCheckLayerAvailability\n                    - ecr:GetDownloadUrlForLayer\n                    - logs:CreateLogStream\n                    - logs:PutLogEvents\n                  Resource: \"*\"\n\n    TaskRole:\n      Type: AWS::IAM::Role\n      Properties:\n        AssumeRolePolicyDocument:\n          Version: \"2012-10-17\"\n          Statement:\n            - Effect: Allow\n              Principal:\n                Service:\n                  - ecs-tasks.amazonaws.com\n              Action:\n                - sts:AssumeRole\n",
+    "command": [
+      "info"
+    ],
+    "options": {},
+    "error": null,
+    "params": {},
+    "machineId": "405f9939c2177edec9c0d29cea954fd9",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "650cdd5d-b03b-41b6-a721-7f8d1dd42fec",
+    "orgName": "matisuez",
+    "userId": "KV2S7HkgVlVmWcDSY0",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "matisuez",
+    "subscription": null,
+    "userEmail": "matisuez@gmail.com",
+    "serviceProviderAwsRegion": "us-east-1",
+    "serviceProviderAwsCredentials": "<REDACTED>",
+    "serviceProviderAwsAccountId": "780673962482",
+    "projectType": "traditional",
+    "versionSf": "4.4.11",
+    "serviceProviderAwsCfStackName": "fargate-api-dev",
+    "integrations": {},
+    "serviceUniqueId": "arn:aws:cloudformation:us-east-1:780673962482:stack/fargate-api-dev/fd8d5c30-a84e-11ef-8245-0eaf46a0829f",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:780673962482:stack/fargate-api-dev/fd8d5c30-a84e-11ef-8245-0eaf46a0829f",
+    "serviceProviderAwsCfStackCreated": "2024-11-21T21:24:28.785Z",
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-31c9e456-3add",
+        "ExportName": "sls-fargate-api-dev-ServerlessDeploymentBucketName"
+      }
+    ]
+  }
+}

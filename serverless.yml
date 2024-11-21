@@ -15,29 +15,18 @@ custom:
     subnetIds:
       - subnet-0773bb21b51055b94
 
+fargate:
+  app:
+    image: 780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest
+    cpu: "256"
+    memory: "512"
+    port: 3000
+    alb:
+      listenerArn: arn:aws:elasticloadbalancing:us-east-1:780673962482:listener/app/<load-balancer-name>/<listener-id>
+      healthCheckPath: /ping
+
 resources:
   Resources:
-    FargateTask:
-      Type: AWS::ECS::TaskDefinition
-      Properties:
-        Family: fargate-api
-        Cpu: "256"
-        Memory: "512"
-        NetworkMode: awsvpc
-        RequiresCompatibilities:
-          - FARGATE
-        ExecutionRoleArn: !GetAtt ExecutionRole.Arn
-        TaskRoleArn: !GetAtt TaskRole.Arn
-        ContainerDefinitions:
-          - Name: fargate-api
-            Image: 780673962482.dkr.ecr.us-east-1.amazonaws.com/fargate-api:latest
-            PortMappings:
-              - ContainerPort: 3000
-                Protocol: tcp
-            Environment:
-              - Name: NODE_ENV
-                Value: production
-
     ExecutionRole:
       Type: AWS::IAM::Role
       Properties:
