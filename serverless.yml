@@ -19,6 +19,7 @@ custom:
     alb:
       listenerArn: arn:aws:elasticloadbalancing:us-east-1:780673962482:listener/app/my-load-balancer/f79d6814d1a14b9a/f9fd786bfa70f045
       healthCheckPath: /ping
+      port: 80
 
 fargate:
   app:
