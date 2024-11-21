@@ -3,6 +3,7 @@ service: fargate-api
 provider:
   name: aws
   region: us-east-1
+  runtime: nodejs14.x
 
 plugins:
   - serverless-fargate
@@ -15,6 +16,9 @@ custom:
     subnetIds:
       - subnet-0773bb21b51055b94
       - subnet-09b6d2a541f807471
+    alb:
+      listenerArn: arn:aws:elasticloadbalancing:us-east-1:780673962482:listener/app/my-load-balancer/f79d6814d1a14b9a/f9fd786bfa70f045
+      healthCheckPath: /ping
 
 fargate:
   app:
@@ -22,9 +26,6 @@ fargate:
     cpu: "256"
     memory: "512"
     port: 3000
-    alb:
-      listenerArn: arn:aws:elasticloadbalancing:us-east-1:780673962482:listener/app/my-load-balancer/f79d6814d1a14b9a/f9fd786bfa70f045
-      healthCheckPath: /ping
 
 resources:
   Resources:
@@ -36,10 +37,8 @@ resources:
           Statement:
             - Effect: Allow
               Principal:
-                Service:
-                  - ecs-tasks.amazonaws.com
-              Action:
-                - sts:AssumeRole
+                Service: ecs-tasks.amazonaws.com
+              Action: sts:AssumeRole
         Policies:
           - PolicyName: ECSExecutionPolicy
             PolicyDocument:
@@ -62,7 +61,18 @@ resources:
           Statement:
             - Effect: Allow
               Principal:
-                Service:
-                  - ecs-tasks.amazonaws.com
-              Action:
-                - sts:AssumeRole
+                Service: ecs-tasks.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: TaskExecutionPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - dynamodb:Query
+                    - s3:GetObject
+                    - logs:DescribeLogGroups
+                    - logs:DescribeLogStreams
+                    - logs:GetLogEvents
+                  Resource: "*"
