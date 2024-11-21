@@ -1,0 +1,23 @@
+service: fargate-api
+
+provider:
+  name: aws
+  region: us-east-1
+
+plugins:
+  - serverless-fargate
+
+custom:
+  fargate:
+    clusterName: fargate-cluster
+    securityGroupIds:
+      - sg-03609c89aa1549572
+    subnetIds:
+      - subnet-0773bb21b51055b94
+
+fargate:
+  app:
+    image: fargate-api:latest
+    cpu: 256
+    memory: 512
+    port: 3000
