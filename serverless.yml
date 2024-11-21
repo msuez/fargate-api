@@ -14,6 +14,7 @@ custom:
       - sg-03609c89aa1549572
     subnetIds:
       - subnet-0773bb21b51055b94
+      - subnet-09b6d2a541f807471
 
 fargate:
   app:
@@ -22,7 +23,7 @@ fargate:
     memory: "512"
     port: 3000
     alb:
-      listenerArn: arn:aws:elasticloadbalancing:us-east-1:780673962482:listener/app/<load-balancer-name>/<listener-id>
+      listenerArn: arn:aws:elasticloadbalancing:us-east-1:780673962482:listener/app/my-load-balancer/f79d6814d1a14b9a/f9fd786bfa70f045
       healthCheckPath: /ping
 
 resources:
